@@ -1,0 +1,54 @@
+create database HealthyLifestyle;
+create table if not exists app_user (
+    ID int auto_increment primary key,
+    name Varchar(255) not null, 
+    email Varchar(255) not null, 
+    height int not null,
+    weight int not null
+);
+
+create table if not exists meal (
+    ID int auto_increment primary key,
+    date_consumed date,
+    app_user_id int not null, 
+    foreign key (app_user_id) references app_user(ID)
+);
+
+create table if not exists food_item (
+    ID int auto_increment primary key,
+    name Varchar(255) not null,
+    mac_prt int not null,
+    mac_cho int not null,
+    mac_fat int not null
+);
+
+create table if not exists food_item_meal (
+    ID int auto_increment primary key,
+    meal_id int not null,
+    food_item_id int not null,
+    foreign key (meal_id) references meal(ID),
+    foreign key (food_item_id) references food_item(ID)
+);
+
+create table if not exists workout (
+    ID int auto_increment primary key,
+    app_user_id int not null,
+    sets_qty int not null,
+    reps_qty int not null,
+    date_completed date,
+    foreign key (app_user_id) references app_user(ID)
+);
+
+create table if not exists exercise (
+    ID int auto_increment primary key,
+    name Varchar(255) not null,
+    muscle_group Varchar(255) not null,
+);
+
+create table if not exists workout_exercise (
+    ID int auto_increment primary key,
+    workout_id int not null,
+    exercise_id int not null,
+    foreign key (workout_id) references workout(ID),
+    foreign key (exercise_id) references exercise(ID)
+);

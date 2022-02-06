@@ -1,0 +1,46 @@
+ENTITIES:
+app_user (name, email, height, weight, exercises)
+workout (exercises, sets, reps, date)
+exercise (name, muscle group, sets, reps)
+
+FUTURE ENTITIES:
+meal (food item(s), date_consumed, )
+food_item (name, macronutreints)
+
+ENDPOINTS:
+GET - /user
+POST - /user
+PUT - /user
+DELETE - /user
+get - /user/{id}
+
+ENDPOINTS:
+GET - /workout 
+get - /workout/{id}
+
+ENDPOINTS:
+GET - /exercise 
+get - /exercise/{id}
+
+THIS IS FOR FUTURE ENHANCEMENTS:
+
+POST - /exercise
+PUT - /exercise 
+DELETE - /exercise 
+POST - /workout
+PUT - /workout 
+DELETE - /workout 
+
+ENDPOINTS:
+GET - /Meal 
+POST - /Meal 
+PUT - /Meal 
+DELETE - /Meal 
+get - /Meal/{id} 
+
+ENDPOINTS:
+GET - /food 
+POST - /food
+PUT - /food 
+DELETE - /food 
+get - /food/{id}
