@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    password: GOEbor009
+    username: root
+    url: jdbc:mysql://localhost:3306/Healthylifestyle
+
+
+logging:
+  level:
+    root: warn
+    '[com.healthyJDBC]': debug
