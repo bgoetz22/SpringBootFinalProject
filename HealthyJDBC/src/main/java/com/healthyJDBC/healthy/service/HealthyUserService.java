@@ -10,6 +10,7 @@ import com.healthyJDBC.healthy.entity.Exercise;
 import com.healthyJDBC.healthy.entity.User;
 import com.healthyJDBC.healthy.entity.Workout;
 
+//All finished updated 2/11 Stephanie
 @Service
 public class HealthyUserService implements UserService{
   @Autowired
@@ -23,20 +24,51 @@ public class HealthyUserService implements UserService{
   @Override
   public List<Exercise> fetchExercise() {
     // TODO Auto-generated method stub
-    return null;
+    return userDao.fetchExercise();
   }
 
   @Override
   public List<Workout> fetchWorkout() {
     // TODO Auto-generated method stub
-    return null;
+    return userDao.fetchWorkout();
   }
 
   @Override
+  public User deleteUser(User user) {
+    // TODO Auto-generated method stub
+    return userDao.deleteUser(user);
+  }
+  
   public User createUser(User user) {
     // TODO Auto-generated method stub
     return userDao.createUser(user);
   }
+
+  @Override
+  public User updateUser(User user) {
+    // TODO Auto-generated method stub
+    return userDao.updateUser();
+  }
+  
+  @Override
+  public User postUser(User user) {
+    // TODO Auto-generated method stub
+    return userDao.postUser(user);
+  }
+  
+  @Override
+  public User getUser(User user) {
+    // TODO Auto-generated method stub
+    return userDao.postUser(user);
+  }
+  
+  
+  
+  
+  
+  
+  
+
 
   
 }

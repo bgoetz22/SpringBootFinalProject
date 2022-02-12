@@ -12,6 +12,8 @@ public class healthyJDBCmain {
     SpringApplication.run(healthyJDBCmain.class, args);
 
   }
+  
+  
 
 }
 

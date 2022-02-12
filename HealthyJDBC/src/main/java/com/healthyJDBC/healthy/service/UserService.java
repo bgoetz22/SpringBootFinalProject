@@ -9,10 +9,20 @@ public interface UserService {
 
   List<User> fetchUser();
   
-  User createUser(User user);
-  
   List<Exercise> fetchExercise();
   
   List<Workout> fetchWorkout();
+
+  User deleteUser(User user);
+  
+  User createUser(User user);
+  
+  User updateUser(User user);
+
+  User postUser(User user);
+
+  User getUser(User user);
+  
+
 
 }

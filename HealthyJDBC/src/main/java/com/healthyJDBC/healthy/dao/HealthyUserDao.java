@@ -24,12 +24,13 @@ import com.healthyJDBC.healthy.entity.Workout;
 import lombok.extern.slf4j.Slf4j;
 
 @Component
+@Slf4j
 public class HealthyUserDao implements UserDao {
   @Autowired
   private NamedParameterJdbcTemplate jdbcTemplate;
 
   /**
-   * 
+   * 2/11 Stephanie and Jolene, Lisa
    */
   // @Override
   // public Order saveOrder(user user, Jeep jeep, Color color,
@@ -219,7 +220,7 @@ public class HealthyUserDao implements UserDao {
    * 
    */ // 2/8
   @Override
-  public List<Workout> fetchWorkout() {
+  public List<Workout> fetchWorkout(int appUserId, int sets, int reps, String dateCompleted) {
     // @formatter:off
       String sql = ""
           + "SELECT * "
@@ -340,23 +341,212 @@ public class HealthyUserDao implements UserDao {
   }
 
 
-
+  //2/11 Stephanie: did this together below 344-359
   @Override
-  public User createUser(User user) {
-    String sql = "INSERT into app_user (name, email, height, weight) values(:name, :email, :height, :weight)";
-    KeyHolder holder = new GeneratedKeyHolder();
-    MapSqlParameterSource params = new MapSqlParameterSource();
-    params.addValue("name", user.getName());
-    params.addValue("email", user.getEmail());
-    params.addValue("height", user.getHeight());
-    params.addValue("weight", user.getWeight());
+  public Optional<User> createUser(String name, String email, int height, int weight) {
+    log.info("DAO: name={}, email={}, height={}, weight={}", name, email, height, weight);
     
-    jdbcTemplate.update(sql, params, holder);
-    user.setID((int) holder.getKey());
-    return user;
+    String sql = "INSERT into app_user (name, email, height, weight) values(:name, :email, :height, :weight)";
+    Map<String, Object> params = new HashMap<>();
+//    KeyHolder holder = new GeneratedKeyHolder();
+//    MapSqlParameterSource params = new MapSqlParameterSource();
+    params.put("name", name.toString());
+    params.put("email", email.toString());
+    params.put("height", height.toBigDecimal());//convert integer to String
+    params.put("weight", weight.toString());
+    
+    jdbcTemplate.update(sql, params);
+    return Optional.ofNullable(User.builder().name(name).email(email).height(height).weight(weight));
+        }
+  
+
+//  @Override
+//  public Optional<Pie> createPies(String pieID, PieSize pieSize, PieType pieType) {
+//    log.info("DAO: pieID={}, pieSize={}", pieID, pieSize);
+  
+  
+  // 2/10 
+  @Override
+  public Optional<Exercise> createExercise(String name, String muscleGroup) {
+    log.info("DAO: name={}, muscle_group={}", name, muscleGroup);
+    
+    String sql = "INSERT into exercise (name, muscle_group) values(:name, :muscle_group)";
+    Map<String, Object> params = new HashMap<>();
+//    KeyHolder holder = new GeneratedKeyHolder();
+//    MapSqlParameterSource params = new MapSqlParameterSource();
+    params.put("name", name.toString());
+    params.put("muscle_group", muscleGroup.toString());
+    
+    jdbcTemplate.update(sql, params);
+    return Optional.ofNullable(User.builder().name(name).muscleGroup(muscleGroup));
+  }
+  
+  // 2/10
+  @Override
+  public Optional<Workout> createWorkout(int sets, int reps, String dateCompleted) {
+    log.info("DAO: sets_qty={}, reps_qty={}, date_completed={}", sets, reps, dateCompleted);
+    
+    String sql = "INSERT into workout (sets_qty, resp_qty, date_completed) values(:sets_qty, :reps_qty, :date_completed)";
+    Map<String, Object> params = new HashMap<>();
+//    KeyHolder holder = new GeneratedKeyHolder();  
+//    MapSqlParameterSource params = new MapSqlParameterSource();
+    params.put("sets_qty", sets.bigInt());
+    params.put("reps_qty", reps.bigInt());
+    params.put("date_completed", dateCompleted.toString());
+    
+    jdbcTemplate.update(sql, params);
+    return Optional.ofNullable(User.builder().sets(sets).reps(reps).dateCompleted(dateCompleted));
   }
 
-  
+  //-----------------ALL 2/10 updated at 7:47 PM below-------------------
+  @Override
+  public Optional<User> deleteUser(String name, String email, int height, int weight) {
+    log.info("DAO: name={}, email={}, height={}, weight={}", name, email, height, weight);
+    
+    String sql = "DELETE from app_user (name, email, height, weight) values(:name, :email, :height, :weight)";
+    Map<String, Object> params = new HashMap<>();
+//    KeyHolder holder = new GeneratedKeyHolder();
+//    MapSqlParameterSource params = new MapSqlParameterSource();
+    params.put("name", name.toString());
+    params.put("email", email.toString());
+    params.put("height", height.toBigDecimal());//convert integer to String
+    params.put("weight", weight.toString());
+    
+    jdbcTemplate.update(sql, params);
+    return Optional.ofNullable(User.builder().name(name).email(email).height(height).weight(weight));
+  }
+
+    @Override
+    public Optional<Exercise> deleteExercise(String name, String muscleGroup) {
+      log.info("DAO: name={}, muscle_group={}", name, muscleGroup);
+      
+      String sql = "DELETE from exercise (name, muscle_group) values(:name, :muscle_group)";
+      Map<String, Object> params = new HashMap<>();
+//      KeyHolder holder = new GeneratedKeyHolder();
+//      MapSqlParameterSource params = new MapSqlParameterSource();
+      params.put("name", name.toString());
+      params.put("muscle_group", muscleGroup.toString());
+      
+      jdbcTemplate.update(sql, params);
+      return Optional.ofNullable(User.builder().name(name).muscleGroup(muscleGroup));
+    
+  }
+
+
+  @Override
+    public Optional<Workout> deleteWorkout(int sets, int reps, String dateCompleted) {
+      log.info("DAO: sets_qty={}, reps_qty={}, date_completed={}", sets, reps, dateCompleted);
+      
+      String sql = "DELETE into workout (sets_qty, resp_qty, date_completed) values(:sets_qty, :reps_qty, :date_completed)";
+      Map<String, Object> params = new HashMap<>();
+//      KeyHolder holder = new GeneratedKeyHolder();  
+//      MapSqlParameterSource params = new MapSqlParameterSource();
+      params.put("sets_qty", sets.bigInt());
+      params.put("reps_qty", reps.bigInt());
+      params.put("date_completed", dateCompleted.toString());
+      
+      jdbcTemplate.update(sql, params);
+      return Optional.ofNullable(User.builder().sets(sets).reps(reps).dateCompleted(dateCompleted));
+      
+  }
+
+
+//  @Override
+//  public Optional<User> postUser(User user) {
+//    // TODO Auto-generated method stub
+//    return null;
+//  }
+//
+//
+//  @Override
+//  public Optional<Exercise> postExercise(Exercise exercise) {
+//    // TODO Auto-generated method stub
+//    return null;
+//  }
+//
+//
+//  @Override
+//  public Optional<Workout> postWorkout(Workout workout) {
+//    // TODO Auto-generated method stub
+//    return null;
+//  }
+//
+//
+//  @Override
+//  public List<User> getUser(User user) {
+//    // TODO Auto-generated method stub
+//    return null;
+//  }
+//
+//
+//  @Override
+//  public Optional<User> createUser(User user) {
+//    // TODO Auto-generated method stub
+//    return null;
+//  }
+//
+//
+//  @Override
+//  public Optional<Exercise> createExercise(Exercise exercise) {
+//    // TODO Auto-generated method stub
+//    return null;
+//  }
+//
+//
+//  @Override
+//  public Optional<Workout> createWorkout(Workout workout) {
+//    // TODO Auto-generated method stub
+//    return null;
+//  }
+//
+//
+//  @Override
+//  public Optional<User> deleteUser(User user) {
+//    // TODO Auto-generated method stub
+//    return null;
+//  }
+//
+//
+//  @Override
+//  public Optional<Exercise> deleteExercise(Exercise exercise) {
+//    // TODO Auto-generated method stub
+//    return null;
+//  }
+//
+//
+//  @Override
+//  public Optional<Workout> deleteWorkout(Workout workout) {
+//    // TODO Auto-generated method stub
+//    return null;
+//  }
+//
+//
+//  @Override
+//  public Optional<User> postUser(User user) {
+//    // TODO Auto-generated method stub
+//    return null;
+//  }
+//
+//
+//  @Override
+//  public Optional<Exercise> postExercise(Exercise exercise) {
+//    // TODO Auto-generated method stub
+//    return null;
+//  }
+//
+//
+//  @Override
+//  public Optional<Workout> postWorkout(Workout workout) {
+//    // TODO Auto-generated method stub
+//    return null;
+//  }
+//
+//
+//  @Override
+//  public Optional<User> updateUser() {
+//    // TODO Auto-generated method stub
+//    return null;
+//  }
   
 
 }
